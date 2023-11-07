@@ -1,17 +1,19 @@
 export class Ship {
     constructor(length) {
         this.length = length
-        this.hit = 0 
+        this.hitCount = 0 
         this._isSunk = false
     }
 
     hit() {
-        this.hit += 1
+        this.hitCount += 1
     }
 
     isSunk() {
-        if (this.length === this.hit) {
+        if (this.hitCount === this.length) {
             return true
+        } else if (this.hitCount > this.length) {
+            throw new Error('Ship has been hit more than its length')
         }
         return false
     }
