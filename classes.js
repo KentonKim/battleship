@@ -53,6 +53,23 @@ export class Gameboard {
     }
   }
 
+  /* PLAY WITH SHIPS ALLOWED TO BE ADJACENT
+  _indicateNearbyShip(coordinates) {
+    let row = coordinates[0]
+    let col = coordinates[1]
+
+    for (let i = -1; i < 2; i += 1) {
+      for (let j = -1; j < 2; j += 1) {
+        if (i === 0 && j === 0) {
+          continue
+        } else if (this._isInBounds([row + i, col + j]) && this._grid[row+i][col+j] === 0) {
+          this._grid[row+i][col+j] = -1
+        }
+      }
+    }
+    return
+  }
+  */
 
   addShip(ship, coordinates) {
     // Assume coordinates within grid bounds
@@ -79,6 +96,7 @@ export class Gameboard {
 
     for (let i = 0; i < shipLength; i += 1) {
         this._grid[row][col] = ship
+        // this._indicateNearbyShip([row,col])
         incrementRowCol(ship)
     }
 
@@ -96,11 +114,11 @@ export class Gameboard {
     // sends hit to correct ship
 
     // Updates grid 
-    if (gridValue === 0) {
+    if (gridValue <= 0) {
         this._grid[row][col] = 1
         return false
     } else if (gridValue instanceof Ship) {
-        this._grid[row][col] = 1
+        this._grid[row][col] = 2
         return true
     } else if (gridValue === 1) {
         throw new Error("Attempted to shoot shot place")
@@ -136,8 +154,7 @@ export class Computer extends Player {
 
   set difficulty(number) {
     if (number < 0 || number > 2) {
-        console.error('Difficulty must be inside [0,2]')
-        return
+        throw new Error('Difficulty must be inside [0,2]')
     } else if (number === this._difficulty) {
         return
     } else {
@@ -163,5 +180,40 @@ export class Computer extends Player {
 
   _playHardMove() {
 
+  }
+}
+
+export class Battlelog {
+  constructor() {
+    this.turn = 1
+    this._log = []
+  }
+
+  addLog(result, player, coordinates) {
+    this._log.push({
+      turn: this.turn,
+      player: player,
+      result: result,
+      coordinates: coordinates
+    })
+    this._incrementTurn()
+  }
+
+  get log() {
+    return this._log
+  }
+
+  filteredLog(player) {
+    const filteredArr = []
+    for (let i = 0; i < this._log.length; i += 1) {
+      if (this._log[i].player === player) {
+        filteredArr.push(this._log[i])
+      }
+    }
+    return filteredArr
+  }
+
+  _incrementTurn() {
+    this.turn += 1
   }
 }
