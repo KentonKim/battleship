@@ -1,14 +1,12 @@
-@import './normalize.css';
-@import './skeleton.css';
-
-
-
+@import "./normalize.css";
+@import "./skeleton.css";
 
 * {
-  border: 1px solid red
+  border: 1px solid red;
 }
 
-html, body {
+html,
+body {
   height: 100%;
 }
 
@@ -16,7 +14,6 @@ html, body {
   height: 100%;
   display: flex;
   flex-direction: column;
-
 }
 
 #options-container {
@@ -48,7 +45,6 @@ html, body {
 }
 
 .grid-node {
-
 }
 
 #footer {
