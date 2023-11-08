@@ -29,6 +29,16 @@ describe("Ship class", () => {
         ship.isSunk()
     }).toThrow()
  })
+
+ it("Indicates correct orientation", () => {
+   expect(ship.isVertical).toBe(true)
+ })
+
+ it("Indicates correct orientation after changing", () => {
+   ship.isVertical = false
+   expect(ship.isVertical).toBe(false)
+ })
+
 })
 
 describe("Gameboard class", () => {
@@ -40,32 +50,34 @@ describe("Gameboard class", () => {
       ship = new Ship(4)
    })
 
-   it.skip("Invalid place due to vertical bounds", () => {
+   it("Invalid place due to vertical bounds", () => {
       expect(() => {
          gameboard.addShip(ship, [7,2])
       }).toThrow()
    })
 
-   it.skip("Invalid place due to horizontal bounds", () => {
+   it("Invalid place due to horizontal bounds", () => {
       expect(() => {
-         gameboard.addShip(ship, [0,8], false)
+         ship.isVertical = false
+         gameboard.addShip(ship, [0,8])
       }).toThrow()
    })
 
-   it.skip("Invalid place to put due to ship in way", () => {
-      gameboard.addShip(ship, [3,0])
-      const newShip = new Ship(3)
+   it("Invalid place to put due to ship in way", () => {
+      gameboard.addShip(ship, [0,3])
+      const newShip = new Ship(3, false)
       expect(() => {
-         gameboard.addShip(newShip, [2,1], false)
+         gameboard.addShip(newShip, [2,1])
       }).toThrow()
    })
 
-   it.skip("Valid place to put vertical ship", () => {
+   it("Valid place to put vertical ship", () => {
       expect(gameboard.addShip(ship, [0,0])).toBe(true)
    })
 
-   it.skip("Valid place to put horizontal ship", () => {
-      expect(gameboard.addShip(ship, [0,0], false)).toBe(true)
+   it("Valid place to put horizontal ship", () => {
+      ship.isVertical = false
+      expect(gameboard.addShip(ship, [0,0])).toBe(true)
    })
 
    describe("Actions in game", () => {
@@ -116,6 +128,5 @@ describe("Player class", () => {
 })
 
 describe("Computer class", () => {
-
 })
 
