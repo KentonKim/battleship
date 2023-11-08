@@ -116,12 +116,13 @@ export class Gameboard {
     // Updates grid 
     if (gridValue <= 0) {
         this._grid[row][col] = 1
-        return false
-    } else if (gridValue instanceof Ship) {
-        this._grid[row][col] = 2
-        return true
-    } else if (gridValue === 1) {
+        return null 
+    } else if (gridValue === 1 || gridValue === 2) {
         throw new Error("Attempted to shoot shot place")
+    } else if (gridValue instanceof Ship) {
+        this._grid[row][col].hit() 
+        this._grid[row][col] = 2
+        return gridValue.isSunk() 
     } else {
         throw new Error("Unexpected value in grid")
     }
