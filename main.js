@@ -52,11 +52,42 @@ const startGame = () => {
     }
 }
 
-startGame()
+// what does start game do?
+    // refresh gamemboard and ships
+    // refresh battle log
+    // refresh players
+    // make computer calculate their board
+    // Determine who is going first
+
+    // refresh DOM elements
+
+// In game
+    // DOM
+        // show who's turn it is and what turn number it is
+    // A turn
+        // Player chooses a spot
+        // battle log logs attack
+        // gameboard receives attack
+            // check if ship is hit 
+                // if sunken, display it
+            // update to show result
+
+    // DOM
+        // show hit/miss animation
+            // show if ship has been sunk
+        // show battle log update
+
+    // turn conclusion
+        // determine is player gets to go again
+        // check if someone won
+    // 
+
+
+// Post game
+    // show refresh button
 
 
 
-// Game Loop
 /*
 while ( "no one has won" ) {
     if ( "first player turn") {
@@ -68,3 +99,5 @@ while ( "no one has won" ) {
     }
 }
 */
+
+startGame()
