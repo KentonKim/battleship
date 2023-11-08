@@ -86,18 +86,39 @@ export class Gameboard {
   }
 
   deleteShip() {}
-
-  moveShip(ship) {
-
-  }
+  moveShip(ship) {}
 
   receiveAttack(coordinates) {
+    // Assume valid coordinates
+    const row = coordinates[0]
+    const col = coordinates[1]
+    const gridValue = this._grid[row][col]
     // sends hit to correct ship
-    // or records coords of missed shot
+
+    // Updates grid 
+    if (gridValue === 0) {
+        this._grid[row][col] = 1
+        return false
+    } else if (gridValue instanceof Ship) {
+        this._grid[row][col] = 1
+        return true
+    } else if (gridValue === 1) {
+        throw new Error("Attempted to shoot shot place")
+    } else {
+        throw new Error("Unexpected value in grid")
+    }
   }
 
   isWiped() {
     //  report if all ships have been sunk
+    for (let i = 0; i < this._grid.length; i += 1) {
+        for (let j = 0; j < this._grid[0].length; j += 1) {
+            if (this._grid[i][j] instanceof Ship) {
+                return false
+            }
+        }
+    }
+    return true
   }
 }
 

@@ -85,36 +85,36 @@ describe("Gameboard class", () => {
          gameboard.addShip(ship, [0,0])
       })
 
-      it.skip("Acknowledges a hit", () => {
+      it("Acknowledges a hit", () => {
          expect(gameboard.receiveAttack([0,0])).toBe(true)
       })
 
-      it.skip("Acknowledges a miss", () => {
-         expect(gameboard.receiveAttack([1,0])).toBe(false)
+      it("Acknowledges a miss", () => {
+         expect(gameboard.receiveAttack([0,1])).toBe(false)
       })
 
-      it.skip("Acknowledges a wipeout", () => {
+      it("Acknowledges a wipeout", () => {
          for (let i = 0; i < 4; i += 1) {
             gameboard.receiveAttack([i,0])
          }
          expect(gameboard.isWiped()).toBe(true)
       })
 
-      it.skip("Acknowledges a continued game", () => {
+      it("Acknowledges a continued game", () => {
          for (let i = 0; i < 3; i += 1) {
             gameboard.receiveAttack([i,0])
          }
          expect(gameboard.isWiped()).toBe(false)
       })
 
-      it.skip("Prevents repeated hit", () => {
+      it("Prevents repeated hit", () => {
          gameboard.receiveAttack([0,0])
          expect(() => {
             gameboard.receiveAttack([0,0])
          }).toThrow()
       })
 
-      it.skip("Prevents repeated miss", () => {
+      it("Prevents repeated miss", () => {
          gameboard.receiveAttack([0,1])
          expect(() => {
             gameboard.receiveAttack([0,1])
