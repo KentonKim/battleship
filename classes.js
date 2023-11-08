@@ -120,7 +120,7 @@ export class Gameboard {
     } else if (gridValue === 1 || gridValue === 2) {
         throw new Error("Attempted to shoot shot place")
     } else if (gridValue instanceof Ship) {
-        this._grid[row][col].hit() 
+        gridValue.hit()
         this._grid[row][col] = 2
         return gridValue.isSunk() 
     } else {
