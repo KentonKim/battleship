@@ -6,7 +6,7 @@ describe("Ship class", () => {
  let ship
 
  beforeEach(() => {
-    ship = new Ship(length)
+    ship = new Ship("test", length)
  })
 
  it("Initialized with correct length", () => {
@@ -47,7 +47,7 @@ describe("Gameboard class", () => {
 
    beforeEach(() => {
       gameboard = new Gameboard()
-      ship = new Ship(4)
+      ship = new Ship("test", 4)
    })
 
    it("Invalid place due to vertical bounds", () => {
@@ -65,7 +65,7 @@ describe("Gameboard class", () => {
 
    it("Invalid place to put due to ship in way", () => {
       gameboard.addShip(ship, [0,3])
-      const newShip = new Ship(3, false)
+      const newShip = new Ship("test2", 3, false)
       expect(() => {
          gameboard.addShip(newShip, [2,1])
       }).toThrow()
@@ -73,7 +73,7 @@ describe("Gameboard class", () => {
 
    it.skip("Invalid place to put due to ship nearby", () => {
       gameboard.addShip(ship, [0,3])
-      const newShip = new Ship(2, false)
+      const newShip = new Ship("test2", 2, false)
       expect(() => {
          gameboard.addShip(newShip, [2,1])
       }).toThrow()
@@ -92,16 +92,16 @@ describe("Gameboard class", () => {
    })
 
    it("Displays hidden ship grid", () => {
-      gameboard.addShip(new Ship(1), [0,0])
-      gameboard.addShip(new Ship(1), [2,2])
-      gameboard.addShip(new Ship(1), [5,5])
-      gameboard.addShip(new Ship(1), [7,3])
+      gameboard.addShip(new Ship("test2", 1), [0,0])
+      gameboard.addShip(new Ship("test3", 1), [2,2])
+      gameboard.addShip(new Ship("test4", 1), [5,5])
+      gameboard.addShip(new Ship("test5", 1), [7,3])
       const mockGrid = Array.from({ length: 10 }, () => Array(10).fill(0))
       expect(gameboard.grid).toEqual(mockGrid)
    })
 
    it("Displays sunken ship grid", () => {
-      gameboard.addShip(new Ship(2), [0,0])
+      gameboard.addShip(new Ship("test2", 2), [0,0])
       gameboard.receiveAttack([0,0])
       gameboard.receiveAttack([1,0])
       const mockGrid = Array.from({ length: 10 }, () => Array(10).fill(0))
@@ -111,7 +111,7 @@ describe("Gameboard class", () => {
    })
 
    it("Displays partial ship grid", () => {
-      gameboard.addShip(new Ship(2), [0,0])
+      gameboard.addShip(new Ship("test2", 2), [0,0])
       gameboard.receiveAttack([0,0])
       const mockGrid = Array.from({ length: 10 }, () => Array(10).fill(0))
       mockGrid[0][0] = 2
@@ -153,7 +153,7 @@ describe("Gameboard class", () => {
       })
 
       it("Acknowledges a continued game after one sink", () => {
-         gameboard.addShip(new Ship(3), [0,3])
+         gameboard.addShip(new Ship("test2", 3), [0,3])
          for (let i = 0; i < 4; i += 1) {
             gameboard.receiveAttack([i,0])
          }

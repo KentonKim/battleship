@@ -1,5 +1,6 @@
 export class Ship {
-  constructor(length, isVertical = true) {
+  constructor(name, length, isVertical = true) {
+    this.name = name;
     this.length = length;
     this.hitCount = 0;
     this._isSunk = false;
@@ -111,10 +112,10 @@ export class Gameboard {
 
     for (let i = 0; i < shipLength; i += 1) {
         this._grid[row][col] = ship
-        if (!(ship in this._shipLoc)) {
-          this._shipLoc[ship] = []
+        if (!(ship.name in this._shipLoc)) {
+          this._shipLoc[ship.name] = []
         }
-        this._shipLoc[ship].push([row, col])
+        this._shipLoc[ship.name].push([row, col])
         // this._indicateNearbyShip([row,col])
         incrementRowCol(ship)
     }
@@ -141,7 +142,7 @@ export class Gameboard {
     } else if (gridValue instanceof Ship) {
         gridValue.hit()
         if (gridValue.isSunk()) {
-          for (let coord of this._shipLoc[gridValue]) {
+          for (let coord of this._shipLoc[gridValue.name]) {
             this._grid[coord[0]][coord[1]] = 3
           }
           return true
