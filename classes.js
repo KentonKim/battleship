@@ -186,13 +186,13 @@ export class Computer extends Player {
 
 export class Battlelog {
   constructor() {
-    this.turn = 1
+    this._turn = 1
     this._log = []
   }
 
   addLog(result, player, coordinates) {
     this._log.push({
-      turn: this.turn,
+      turn: this._turn,
       player: player,
       result: result,
       coordinates: coordinates
@@ -202,6 +202,10 @@ export class Battlelog {
 
   get log() {
     return this._log
+  }
+
+  get turn() {
+    return this._turn
   }
 
   filteredLog(player) {
@@ -215,6 +219,6 @@ export class Battlelog {
   }
 
   _incrementTurn() {
-    this.turn += 1
+    this._turn += 1
   }
 }
