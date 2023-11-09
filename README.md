@@ -2,31 +2,17 @@
 
 TOP Battleship
 
-// page initialization
-main
+// computer algorithm
 
-- user grid
-- battle log
-  -
-- computer grid
-- hover down options
-  - new game
-    - resets everything
-  - computer difficulty (can change in game)
-    - changes computer's tactics
 
-//
+// initialize array of numbers representing coordinates
 
-Class battle logs
 
-- stack of battle nodes
+// When ship locations are unknown
+  // EASY: take from random number in array
+      // pop it and use as coords for attack
+  // Medium: take from random number in filtered array
+      // filtered array has every other coordinate 
+  // HARD: select out of the most probable
 
-Class battle node
-
-- user or not
-- location
-- hit or not
-
-// setup phase
-
-//
+// When there is a 
