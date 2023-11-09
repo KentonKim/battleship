@@ -191,7 +191,7 @@ export class Computer extends Player {
 
   _checkHanging(grid) {
     const validMoves= []
-    const hangingShips = null
+    let hangingShips = null
     for (let i = 0; i < grid.length; i += 1) {
       for (let j = 0;  j < grid[0].length; j += 1) {
         if (grid[i][j] === 0) {
@@ -204,12 +204,84 @@ export class Computer extends Player {
     return [hangingShips, validMoves]
   }
 
+  _attackHanging(grid,coords) {
+    let row = coords[0]
+    let col = coords[1]
+    let isVertical = null
+    const vertMoves = []
+    const horzMoves = []
+    // check above
+    while (row != 0) {
+      if (grid[row-1][col] === 2) {
+        isVertical = true
+        row -= 1
+        continue
+      } else if (grid[row-1][col] === 0) {
+        vertMoves.push([row-1,col])
+      }
+      break
+    }
+
+    row = coords[0]
+
+    // check bot
+    while (row != grid.length - 1) {
+      if (grid[row+1][col] === 2) {
+        isVertical = true
+        row += 1
+        continue
+      } else if (grid[row+1][col] === 0) {
+        vertMoves.push([row+1,col])
+      }
+      break
+    }
+
+    if (isVertical) {
+      return vertMoves[Math.floor(Math.random() * vertMoves.length)]
+    }
+
+    row = coords[0]
+
+    // check left
+    while (col != 0) {
+      if (grid[row][col-1] === 2) {
+        isVertical = false 
+        col -= 1
+        continue
+      } else if (grid[row][col-1] === 0) {
+        horzMoves.push([row,col-1])
+      }
+      break
+    }
+
+    col = coords[1]
+    
+    // check right 
+    while (col != grid[0].length - 1) {
+      if (grid[row][col+1] === 2) {
+        isVertical = false 
+        col += 1
+        continue
+      } else if (grid[row][col+1] === 0) {
+        horzMoves.push([row,col+1])
+      }
+      break
+    }
+
+    if (isVertical === false) {
+      return horzMoves[Math.floor(Math.random() * horzMoves.length)]
+    }
+
+    horzMoves.push(...vertMoves)
+    return horzMoves[Math.floor(Math.random() * horzMoves.length)]
+  }
+
   playMove(grid) {
     let index 
     // scan for hanging ships
     const [hangingCoords, validMoves] = this._checkHanging(grid)
     if (hangingCoords !== null) {
-      return this._attackHanging(hangingCoords)
+      return this._attackHanging(grid, hangingCoords)
     }
 
     // if (this._difficulty === 0) { // Easy

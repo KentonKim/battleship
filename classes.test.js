@@ -220,58 +220,60 @@ describe("Computer class", () => {
          grid[1][1] = 2
       })
 
-      it.skip("Easy computer attacks 25% place", () => {
+      it("Computer attacks 25% place", () => {
          computer.difficulty = 0
          let coords = computer.playMove(grid)
          expect(
-            [[0,1],[1,0],[1,2],[2,1]].some((element => {
-               element[0] === coords[0] && element[1] === coords[1]
-            }))
+            [[0,1],[1,0],[1,2],[2,1]].some((element => element[0] === coords[0] && element[1] === coords[1]))
          ).toBe(true)
       })
 
-      it.skip("Medium computer attacks 25% place", () => {
+      it("Medium computer attacks 25% place", () => {
          computer.difficulty = 1
          let coords = computer.playMove(grid)
          expect(
-            [[0,1],[1,0],[1,2],[2,1]].some((element => {
-               element[0] === coords[0] && element[1] === coords[1]
-            }))
+            [[0,1],[1,0],[1,2],[2,1]].some((element => element[0] === coords[0] && element[1] === coords[1]))
          ).toBe(true)
       })
 
-      it.skip("Hard computer attacks 25% place", () => {
+      it("Hard computer attacks 25% place", () => {
          computer.difficulty = 2
          let coords = computer.playMove(grid)
          expect(
-            [[0,1],[1,0],[1,2],[2,1]].some((element => {
-               element[0] === coords[0] && element[1] === coords[1]
-            }))
+            [[0,1],[1,0],[1,2],[2,1]].some((element => element[0] === coords[0] && element[1] === coords[1]))
          ).toBe(true)
       })
    })
 
    describe("Attacks 100% place", () => {
       beforeEach(() => {
-         grid = Array.from({ length: 5 }, () => Array(5).fill(0))
+         grid = Array.from({ length: 3 }, () => Array(3).fill(0))
+      })
+
+      it("Computer attacks below", () => {
+         grid[0][0] = 2
+         grid[1][0] = 2
+         expect(computer.playMove(grid)).toEqual([2,0])
+      })
+
+      it("Computer attacks above", () => {
+         grid[1][0] = 2
+         grid[2][0] = 2
+         expect(computer.playMove(grid)).toEqual([0,0])
+      })
+
+      it("Computer attacks left", () => {
+         grid[0][1] = 2
+         grid[0][2] = 2
+         expect(computer.playMove(grid)).toEqual([0,0])
+      })
+
+      it("Computer attacks right", () => {
          grid[0][0] = 2
          grid[0][1] = 2
+         expect(computer.playMove(grid)).toEqual([0,2])
       })
 
-      it.skip("Easy computer attacks 100% place", () => {
-         computer.difficulty = 0
-         expect(computer.playMove(grid)).toBe([0,2])
-      })
-
-      it.skip("Medium computer attacks 100% place", () => {
-         computer.difficulty = 1
-         expect(computer.playMove(grid)).toBe([0,2])
-      })
-
-      it.skip("Hard computer attacks 100% place", () => {
-         computer.difficulty = 2
-         expect(computer.playMove(grid)).toBe([0,2])
-      })
    })
 })
 
