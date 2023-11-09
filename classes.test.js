@@ -91,6 +91,33 @@ describe("Gameboard class", () => {
       expect(gameboard.addShip(ship, [0,0])).toBe(true)
    })
 
+   it("Displays hidden ship grid", () => {
+      gameboard.addShip(new Ship(1), [0,0])
+      gameboard.addShip(new Ship(1), [2,2])
+      gameboard.addShip(new Ship(1), [5,5])
+      gameboard.addShip(new Ship(1), [7,3])
+      const mockGrid = Array.from({ length: 10 }, () => Array(10).fill(0))
+      expect(gameboard.grid).toEqual(mockGrid)
+   })
+
+   it("Displays sunken ship grid", () => {
+      gameboard.addShip(new Ship(2), [0,0])
+      gameboard.receiveAttack([0,0])
+      gameboard.receiveAttack([1,0])
+      const mockGrid = Array.from({ length: 10 }, () => Array(10).fill(0))
+      mockGrid[0][0] = 3
+      mockGrid[1][0] = 3
+      expect(gameboard.grid).toEqual(mockGrid)
+   })
+
+   it("Displays partial ship grid", () => {
+      gameboard.addShip(new Ship(2), [0,0])
+      gameboard.receiveAttack([0,0])
+      const mockGrid = Array.from({ length: 10 }, () => Array(10).fill(0))
+      mockGrid[0][0] = 2
+      expect(gameboard.grid).toEqual(mockGrid)
+   })
+
    describe("Actions in game", () => {
       beforeEach(() => {
          gameboard.addShip(ship, [0,0])
@@ -147,6 +174,7 @@ describe("Player class", () => {
 
 describe("Computer class", () => {
    let computer 
+   let grid
 
    beforeEach(() => {
       computer = new Computer('Comp')
@@ -164,56 +192,85 @@ describe("Computer class", () => {
       }).toThrow()
    })
 
-   describe("Computer moves", () => {
-      let grid
+   describe("Attacks valid spaces", () => {
       beforeEach(() => {
+         grid = Array.from({ length: 5 }, () => Array(5).fill(1))
+         grid[3][3] = 0
       })
 
-      describe("Easy computer moves", () => {
-         beforeAll(() => {
-            computer.difficulty = 0
-         })
-
-         it("Easy computer attacks open space", () => {
-            grid = Array.from({ length: 5 }, () => Array(5).fill(1))
-            grid[3][3] = 0
-            expect(computer.playMove(grid)).toBe([3,3])
-         })
-
-         it.skip("Easy computer attacks 25% place", () => {
-            grid = Array.from({ length: 5 }, () => Array(5).fill(0))
-            grid[1][1] = 2
-            let coords = computer.playMove(grid)
-            expect(
-               [[0,1],[1,0],[1,2],[2,1]].some((element => {
-                  element[0] === coords[0] && element[1] === coords[1]
-               }))
-            ).toBe(true)
-         })
-
-         it.skip("Easy computer attacks 25% place", () => {
-
-         })
+      it.skip("Easy computer attacks open space", () => {
+         computer.difficulty = 0
+         expect(computer.playMove(grid)).toBe([3,3])
       })
 
-      describe("Med computer moves", () => {
-         beforeAll(() => {
-            computer.difficulty = 1
-         })
-         it.skip("Easy computer attacks calculated place", () => {
-
-         })
-
+      it.skip("Medium computer attacks open space", () => {
+         computer.difficulty = 1
+         expect(computer.playMove(grid)).toBe([3,3])
       })
 
-      describe("Hard computer moves", () => {
-         beforeAll(() => {
-            computer.difficulty = 2
-         })
-         it.skip("Hard computer attacks probable place", () => {
+      it.skip("Hard computer attacks open space", () => {
+         computer.difficulty = 2
+         expect(computer.playMove(grid)).toBe([3,3])
+      })
+   })
 
-         })
+   describe("Attacks 25% place", () => {
+      beforeEach(() => {
+         grid = Array.from({ length: 5 }, () => Array(5).fill(0))
+         grid[1][1] = 2
+      })
 
+      it.skip("Easy computer attacks 25% place", () => {
+         computer.difficulty = 0
+         let coords = computer.playMove(grid)
+         expect(
+            [[0,1],[1,0],[1,2],[2,1]].some((element => {
+               element[0] === coords[0] && element[1] === coords[1]
+            }))
+         ).toBe(true)
+      })
+
+      it.skip("Medium computer attacks 25% place", () => {
+         computer.difficulty = 1
+         let coords = computer.playMove(grid)
+         expect(
+            [[0,1],[1,0],[1,2],[2,1]].some((element => {
+               element[0] === coords[0] && element[1] === coords[1]
+            }))
+         ).toBe(true)
+      })
+
+      it.skip("Hard computer attacks 25% place", () => {
+         computer.difficulty = 2
+         let coords = computer.playMove(grid)
+         expect(
+            [[0,1],[1,0],[1,2],[2,1]].some((element => {
+               element[0] === coords[0] && element[1] === coords[1]
+            }))
+         ).toBe(true)
+      })
+   })
+
+   describe("Attacks 100% place", () => {
+      beforeEach(() => {
+         grid = Array.from({ length: 5 }, () => Array(5).fill(0))
+         grid[0][0] = 2
+         grid[0][1] = 2
+      })
+
+      it.skip("Easy computer attacks 100% place", () => {
+         computer.difficulty = 0
+         expect(computer.playMove(grid)).toBe([0,2])
+      })
+
+      it.skip("Medium computer attacks 100% place", () => {
+         computer.difficulty = 1
+         expect(computer.playMove(grid)).toBe([0,2])
+      })
+
+      it.skip("Hard computer attacks 100% place", () => {
+         computer.difficulty = 2
+         expect(computer.playMove(grid)).toBe([0,2])
       })
    })
 })
