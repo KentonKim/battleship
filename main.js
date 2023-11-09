@@ -3,7 +3,7 @@ import "./style.css";
 // import viteLogo from "/vite.svg";
 // import { setupCounter } from "./counter.js";
 import initializeDom from "./initializeDom.js";
-import { Player, Computer, Ship, Gameboard } from "./classes";
+import { Player, Computer, Ship, Gameboard, Battlelog } from "./classes";
 
 // Setup Dom
 initializeDom(document.querySelector("#app"));
@@ -14,7 +14,7 @@ let userGameboard
 let computerGameboard
 let computerShips
 let userShips
-let turn
+let battlelog
 
 const getRandomCoords = () => {
     return [Math.floor(Math.random() * 10), Math.floor(Math.random() * 10)]
@@ -27,15 +27,30 @@ const getRandBool = () => {
     return false
 }
 
-const startGame = () => {
-    turn = 1
+const switchBetween = (current, optionOne, optionTwo) => {
+    if (current=== optionOne) {
+        return optionTwo 
+    }
+    return optionOne
+}
 
+const isWin = (board) => {
+    return board.isWiped()
+}
+
+const startGame = () => {
+    // refresh players
     user = new Player("User")
     computer = new Computer('computer')
+
+    // refresh gamemboard and ships
     userGameboard = new Gameboard()
     computerGameboard = new Gameboard()
     userShips = [new Ship(5), new Ship(4), new Ship(3), new Ship(3), new Ship(2)]
     computerShips = [new Ship(5), new Ship(4), new Ship(3), new Ship(3), new Ship(2)]
+    // refresh battle log
+    battlelog = new Battlelog()
+
 
     // Computer fills board
     for (let i = 0; i < computerShips.length; i += 1) {
@@ -50,54 +65,70 @@ const startGame = () => {
             }
         }
     }
-}
-
-// what does start game do?
-    // refresh gamemboard and ships
-    // refresh battle log
-    // refresh players
-    // make computer calculate their board
-    // Determine who is going first
-
     // refresh DOM elements
+        // TODO
+}
 
 // In game
-    // DOM
-        // show who's turn it is and what turn number it is
-    // A turn
+const playGame = (player1, player2, gb1, gb2, battlelog) => {
+    // TODO change this to be responsive to DOM
+    let currPlayer = player1 
+    let currBoard = gb2
+    let result
+    let coords
+    let isGoingAgain = true
+
+    while (!isWin(currBoard)) {
+        // Premptive Turn Switch conclusion
+        if (!isGoingAgain) {
+            currPlayer = switchBetween(currPlayer, player1, player2)
+            currBoard = switchBetween(currBoard, gb1, gb2)
+        }
+        isGoingAgain = false
+
+
+        // DOM
+            // show who's turn it is and what turn number it is
+
+
         // Player chooses a spot
+        if (currPlayer === player1) {
+            coords = prompt("Where to attack")
+        } else {
+            coords = player2.playMove()
+        }
+
+        // Proceeds with attack
+        result = currBoard.receiveAttack(coords)
+        if (result === null) {
+            // displayMiss() // TODO DOM
+        } else if (result) {
+            isGoingAgain = true
+            // displaySunk() // TODO DOM
+        } else if (!result) {
+            isGoingAgain = true
+            // displayHit() // TODO DOM
+        }
+
         // battle log logs attack
-        // gameboard receives attack
-            // check if ship is hit 
-                // if sunken, display it
-            // update to show result
-
-    // DOM
-        // show hit/miss animation
-            // show if ship has been sunk
-        // show battle log update
-
-    // turn conclusion
-        // determine is player gets to go again
-        // check if someone won
-    // 
-
-
-// Post game
-    // show refresh button
-
-
-
-/*
-while ( "no one has won" ) {
-    if ( "first player turn") {
-        coordinates = await user.playMove()
-        result = computerGameboard.receiveAttack(coordinates)
-    } else {
-        coordinates = computer.playMove()
-        result = userGameboard.receiveAttack(coordinates)
+        battlelog.addLog(result, currPlayer, coords)
+        // updateBattleLog() // TODO DOM
     }
+    return currPlayer
 }
-*/
 
-startGame()
+const endGame = (winner) => {
+    alert(`${winner.name} has won!`)    
+}
+
+const gameEncapsulate = () => {
+    // Start Game
+    startGame()
+    // Game
+    let winner = playGame(user, computer, user, userGameboard, computerGameboard, battlelog)
+    // End Game
+    endGame(winner)
+}
+
+gameEncapsulate()
+// button.onclick(gameEncapsulate)
