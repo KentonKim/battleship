@@ -177,7 +177,6 @@ export class Computer extends Player {
   constructor(name) {
     super(name)
     this._difficulty = 1
-    this._
   }
 
   set difficulty(number) {
@@ -190,22 +189,46 @@ export class Computer extends Player {
     }
   }
 
-  playMove() {
-    if (this._isHangingShip) {
-      this._playRequired
+  _checkHanging(grid) {
+    const validMoves= []
+    const hangingShips = null
+    for (let i = 0; i < grid.length; i += 1) {
+      for (let j = 0;  j < grid[0].length; j += 1) {
+        if (grid[i][j] === 0) {
+          validMoves.push([i,j])
+        } else if (grid[i][j] === 2) {
+          hangingShips = [i,j]
+        }
+      }
     }
-    if (this._difficulty === 0) { // Easy
-        this._playEasyMove()
-    } else if (this._difficulty === 1) { // Medium
-        this._playMediumMmove()
-    } else {
-        this._playHardMove()
-    }
+    return [hangingShips, validMoves]
   }
 
-  _playEasyMove() {}
+  playMove(grid) {
+    let index 
+    // scan for hanging ships
+    const [hangingCoords, validMoves] = this._checkHanging(grid)
+    if (hangingCoords !== null) {
+      return this._attackHanging(hangingCoords)
+    }
+
+    // if (this._difficulty === 0) { // Easy
+    //   return this._playEasyMove(validMoves)
+    // } else if (this._difficulty === 1) { // Medium
+    //   return  this._playMediumMove(validMoves)
+    // } else {
+    //   return this._playHardMove(validMoves)
+    // }
+
+    return this._playEasyMove(validMoves)
+  }
+
+  _playEasyMove(moves) {
+    const randNum = Math.floor(Math.random() * moves.length)
+    return moves[randNum] 
+  }
   
-  _playMediumMmove() {
+  _playMediumMove() {
 
   }
 
