@@ -145,7 +145,15 @@ describe("Gameboard class", () => {
          expect(gameboard.isWiped()).toBe(true)
       })
 
-      it("Acknowledges a continued game", () => {
+      it("Acknowledges a continued game after hit", () => {
+         for (let i = 0; i < 3; i += 1) {
+            gameboard.receiveAttack([i,0])
+         }
+         expect(gameboard.isWiped()).toBe(false)
+      })
+
+      it("Acknowledges a continued game after one sink", () => {
+         gameboard.addShip(ship, [0,3])
          for (let i = 0; i < 3; i += 1) {
             gameboard.receiveAttack([i,0])
          }
