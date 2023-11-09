@@ -32,10 +32,19 @@ export class Gameboard {
   constructor() {
     this.log = []; // keep track of missed attacks
     this._grid = Array.from({ length: 10 }, () => Array(10).fill(0));
+    this._shipLoc = {}
   }
 
   get grid() {
-    return this._grid
+    return this._grid.map( subarray => 
+      subarray.map( element => {
+        if (element instanceof Ship) {
+          return 0
+        } else {
+          return element
+        }
+      })
+    )
   }
 
   _isInBounds(coordinates) {
@@ -88,6 +97,8 @@ export class Gameboard {
             col += 1
         }
     }
+
+    // Check validity 
     for (let i = 0; i < shipLength; i += 1) {
         if (!this._isInBounds([row, col]) || !this._isEmpty([row, col])) {
             throw new Error('Invalid place for ship')
@@ -100,6 +111,10 @@ export class Gameboard {
 
     for (let i = 0; i < shipLength; i += 1) {
         this._grid[row][col] = ship
+        if (!(ship in this._shipLoc)) {
+          this._shipLoc[ship] = []
+        }
+        this._shipLoc[ship].push([row, col])
         // this._indicateNearbyShip([row,col])
         incrementRowCol(ship)
     }
@@ -115,9 +130,9 @@ export class Gameboard {
     const row = coordinates[0]
     const col = coordinates[1]
     const gridValue = this._grid[row][col]
-    // sends hit to correct ship
 
     // Updates grid 
+    // sends hit to correct ship
     if (gridValue <= 0) {
         this._grid[row][col] = 1
         return null 
@@ -125,8 +140,15 @@ export class Gameboard {
         throw new Error("Attempted to shoot shot place")
     } else if (gridValue instanceof Ship) {
         gridValue.hit()
-        this._grid[row][col] = 2
-        return gridValue.isSunk() 
+        if (gridValue.isSunk()) {
+          for (let coord of this._shipLoc[gridValue]) {
+            this._grid[coord[0]][coord[1]] = 3
+          }
+          return true
+        } else {
+          this._grid[row][col] = 2
+          return false
+        }
     } else {
         throw new Error("Unexpected value in grid")
     }
@@ -154,7 +176,8 @@ export class Player {
 export class Computer extends Player {
   constructor(name) {
     super(name)
-    this._difficulty = 1 
+    this._difficulty = 1
+    this._
   }
 
   set difficulty(number) {
@@ -168,6 +191,9 @@ export class Computer extends Player {
   }
 
   playMove() {
+    if (this._isHangingShip) {
+      this._playRequired
+    }
     if (this._difficulty === 0) { // Easy
         this._playEasyMove()
     } else if (this._difficulty === 1) { // Medium
