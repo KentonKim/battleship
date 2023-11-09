@@ -38,30 +38,47 @@ const isWin = (board) => {
     return board.isWiped()
 }
 
+const placeShipsRandomly = (ships) => {
+    const board = new Gameboard()
+    for (let i = 0; i < ships.length; i += 1) {
+        let success = false
+        ships[i].isVertical = getRandBool()
+        while (!success) {
+            try {
+                board.addShip(ships[i], getRandomCoords())
+                success = true
+            } catch (error) {
+                console.log('Computer attempting to place ship')
+            }
+        }
+    }
+    return board
+}
+
 const startGame = () => {
     // refresh players
     user = new Player("User")
     computer = new Computer('computer')
 
     // refresh gamemboard and ships
-    userGameboard = new Gameboard()
-    computerGameboard = new Gameboard()
     userShips = [new Ship(5), new Ship(4), new Ship(3), new Ship(3), new Ship(2)]
     computerShips = [new Ship(5), new Ship(4), new Ship(3), new Ship(3), new Ship(2)]
+    userGameboard = placeShipsRandomly(userShips) 
+    computerGameboard = placeShipsRandomly(computerShips) 
     // refresh battle log
     battlelog = new Battlelog()
 
-
     // Computer fills board
-    for (let i = 0; i < computerShips.length; i += 1) {
+    // TODO User fills board
+    for (let i = 0; i < userShips.length; i += 1) {
         let success = false
-        computerShips[i].isVertical = getRandBool()
+        userShips[i].isVertical = getRandBool()
         while (!success) {
             try {
-                computerGameboard.addShip(computerShips[i], getRandomCoords())
+                userGameboard.addShip(userShips[i], getRandomCoords())
                 success = true
             } catch (error) {
-                console.log('Computer attempting to place ship')
+                console.log('User attempting to place ship')
             }
         }
     }
@@ -84,6 +101,7 @@ const playGame = (player1, player2, gb1, gb2, battlelog) => {
             currPlayer = switchBetween(currPlayer, player1, player2)
             currBoard = switchBetween(currBoard, gb1, gb2)
         }
+
         isGoingAgain = false
 
         // DOM
@@ -92,23 +110,28 @@ const playGame = (player1, player2, gb1, gb2, battlelog) => {
         // Player chooses a spot
         if (currPlayer === player1) {
             coords = [] // TODO HOW PLAYER ATTACKS COORDS
+            coords.push(prompt('row'))
+            coords.push(prompt('column'))
         } else {
-            coords = player2.playMove()
+            coords = player2.playMove(currBoard.grid)
         }
 
+        console.log(`${currPlayer.name}`)
         // Proceeds with attack
         result = currBoard.receiveAttack(coords)
         if (result === null) {
             // displayMiss() // TODO DOM
+            console.log('missed')
         } else if (result) {
             isGoingAgain = true
             // displaySunk() // TODO DOM
+            console.log('ship sunk')
         } else if (!result) {
             isGoingAgain = true
             // displayHit() // TODO DOM
+            console.log('ship hit')
         }
 
-        console.log(`${currPlayer.name}`)
         console.log(currBoard.grid)
         // battle log logs attack
         battlelog.addLog(result, currPlayer, coords)
