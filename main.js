@@ -86,14 +86,12 @@ const playGame = (player1, player2, gb1, gb2, battlelog) => {
         }
         isGoingAgain = false
 
-
         // DOM
             // show who's turn it is and what turn number it is
 
-
         // Player chooses a spot
         if (currPlayer === player1) {
-            coords = prompt("Where to attack")
+            coords = [] // TODO HOW PLAYER ATTACKS COORDS
         } else {
             coords = player2.playMove()
         }
@@ -110,6 +108,8 @@ const playGame = (player1, player2, gb1, gb2, battlelog) => {
             // displayHit() // TODO DOM
         }
 
+        console.log(`${currPlayer.name}`)
+        console.log(currBoard.grid)
         // battle log logs attack
         battlelog.addLog(result, currPlayer, coords)
         // updateBattleLog() // TODO DOM
@@ -125,7 +125,7 @@ const gameEncapsulate = () => {
     // Start Game
     startGame()
     // Game
-    let winner = playGame(user, computer, user, userGameboard, computerGameboard, battlelog)
+    let winner = playGame(user, computer, userGameboard, computerGameboard, battlelog)
     // End Game
     endGame(winner)
 }

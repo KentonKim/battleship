@@ -147,6 +147,7 @@ describe("Player class", () => {
 
 describe("Computer class", () => {
    let computer 
+
    beforeEach(() => {
       computer = new Computer('Comp')
    })
@@ -164,19 +165,30 @@ describe("Computer class", () => {
    })
 
    describe("Computer moves", () => {
-      // Initialize a board
+      let grid
+      beforeEach(() => {
+      })
 
       describe("Easy computer moves", () => {
          beforeAll(() => {
             computer.difficulty = 0
          })
 
-         it.skip("Easy computer attacks random place", () => {
-
+         it("Easy computer attacks open space", () => {
+            grid = Array.from({ length: 5 }, () => Array(5).fill(1))
+            grid[3][3] = 0
+            expect(computer.playMove(grid)).toBe([3,3])
          })
 
          it.skip("Easy computer attacks 25% place", () => {
-
+            grid = Array.from({ length: 5 }, () => Array(5).fill(0))
+            grid[1][1] = 2
+            let coords = computer.playMove(grid)
+            expect(
+               [[0,1],[1,0],[1,2],[2,1]].some((element => {
+                  element[0] === coords[0] && element[1] === coords[1]
+               }))
+            ).toBe(true)
          })
 
          it.skip("Easy computer attacks 25% place", () => {

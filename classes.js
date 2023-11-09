@@ -34,6 +34,10 @@ export class Gameboard {
     this._grid = Array.from({ length: 10 }, () => Array(10).fill(0));
   }
 
+  get grid() {
+    return this._grid
+  }
+
   _isInBounds(coordinates) {
     if (coordinates[0] >= 0 
         && coordinates[0] <= 9
