@@ -14,5 +14,6 @@ TOP Battleship
   // Medium: take from random number in filtered array
       // filtered array has every other coordinate 
   // HARD: select out of the most probable
+      // 
 
 // When there is a 
