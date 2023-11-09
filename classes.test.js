@@ -198,19 +198,19 @@ describe("Computer class", () => {
          grid[3][3] = 0
       })
 
-      it.skip("Easy computer attacks open space", () => {
+      it("Easy computer attacks open space", () => {
          computer.difficulty = 0
-         expect(computer.playMove(grid)).toBe([3,3])
+         expect(computer.playMove(grid)).toEqual([3,3])
       })
 
       it.skip("Medium computer attacks open space", () => {
          computer.difficulty = 1
-         expect(computer.playMove(grid)).toBe([3,3])
+         expect(computer.playMove(grid)).toEqual([3,3])
       })
 
       it.skip("Hard computer attacks open space", () => {
          computer.difficulty = 2
-         expect(computer.playMove(grid)).toBe([3,3])
+         expect(computer.playMove(grid)).toEqual([3,3])
       })
    })
 
