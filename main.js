@@ -115,7 +115,6 @@ const playGame = (player1, player2, gb1, gb2, battlelog) => {
             console.log('ship hit')
         }
 
-        console.log(currBoard.grid)
         // battle log logs attack
         battlelog.addLog(result, currPlayer, coords)
         // updateBattleLog() // TODO DOM
