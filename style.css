@@ -13,27 +13,62 @@ body {
 #app {
   height: 100%;
   display: flex;
-  flex-direction: column;
 }
 
 #options-container {
+  --width: 300px;
+  --hide-height: 100px;
   position: fixed;
+  top: calc(-1 * var(--hide-height));
+  left: calc(50% - 0.5 * var(--width));
+  width: var(--width);
   display: flex;
   flex-direction: column;
   align-items: center;
+  transition: top 0.5s ease;
 }
 
-#header {
-  height: 200px;
+#options-options {
+  height: var(--hide-height);
+}
+
+#options-bookmark {
+  background-color: rebeccapurple;
+  width: 80px;
+  height: 60px;
+  transition: opacity 1s ease;
+  transition-delay: 1s;
+}
+
+#options-container:has(#options-bookmark:hover), #options-container:has(#options-options:hover) {
+  top: 0;
+}
+
+#options-bookmark:hover, #options-options:hover + #options-bookmark {
+  transition: opacity 0.5s ease;
+  transition-delay: 0s;
+  opacity: 0;
+}
+
+#n-log {
+  position: fixed;
+  left: calc(50% - 100px);
+  top: 200px;
+  width: 200px;
+  height: 500px;
+}
+
+.side {
+  flex: 1;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: space-around;
   align-items: center;
 }
 
-#content {
-  flex: 1;
-  display: flex;
-  justify-content: space-around;
+.name {
+  width: 300px;
+  height: 60px;
 }
 
 .grid {
@@ -44,11 +79,13 @@ body {
   grid-template-rows: repeat(11, 1fr);
 }
 
-.grid-node {
+.ships-container {
+  width: 500px;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
 }
 
-#footer {
-  height: 160px;
-  display: flex;
-  justify-content: space-around;
+.ships-container > div {
+  height: 40px;
 }
