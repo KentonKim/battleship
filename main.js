@@ -57,31 +57,16 @@ const placeShipsRandomly = (ships) => {
 
 const startGame = () => {
     // refresh players
-    user = new Player("User")
-    computer = new Computer('computer')
+    user = new Computer("Computer 1")
+    computer = new Computer('Computer 2')
 
     // refresh gamemboard and ships
-    userShips = [new Ship(5), new Ship(4), new Ship(3), new Ship(3), new Ship(2)]
-    computerShips = [new Ship(5), new Ship(4), new Ship(3), new Ship(3), new Ship(2)]
+    userShips = [new Ship('carrier', 5), new Ship('battleship', 4), new Ship('cruiser', 3), new Ship('submarine', 3), new Ship('destroyer', 2)]
+    computerShips = [new Ship('carrier', 5), new Ship('battleship', 4), new Ship('cruiser', 3), new Ship('submarine', 3), new Ship('destroyer', 2)]
     userGameboard = placeShipsRandomly(userShips) 
     computerGameboard = placeShipsRandomly(computerShips) 
     // refresh battle log
     battlelog = new Battlelog()
-
-    // Computer fills board
-    // TODO User fills board
-    for (let i = 0; i < userShips.length; i += 1) {
-        let success = false
-        userShips[i].isVertical = getRandBool()
-        while (!success) {
-            try {
-                userGameboard.addShip(userShips[i], getRandomCoords())
-                success = true
-            } catch (error) {
-                console.log('User attempting to place ship')
-            }
-        }
-    }
     // refresh DOM elements
         // TODO
 }
@@ -108,15 +93,13 @@ const playGame = (player1, player2, gb1, gb2, battlelog) => {
             // show who's turn it is and what turn number it is
 
         // Player chooses a spot
+        console.log(`${currPlayer.name}`)
         if (currPlayer === player1) {
-            coords = [] // TODO HOW PLAYER ATTACKS COORDS
-            coords.push(prompt('row'))
-            coords.push(prompt('column'))
+            coords = player1.playMove(currBoard.grid)
         } else {
             coords = player2.playMove(currBoard.grid)
         }
 
-        console.log(`${currPlayer.name}`)
         // Proceeds with attack
         result = currBoard.receiveAttack(coords)
         if (result === null) {
@@ -154,4 +137,4 @@ const gameEncapsulate = () => {
 }
 
 gameEncapsulate()
-// button.onclick(gameEncapsulate)
+document.querySelector('#app').addEventListener('mouseup', gameEncapsulate)

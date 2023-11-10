@@ -35,7 +35,7 @@ export class Gameboard {
     this._grid = Array.from({ length: 10 }, () => Array(10).fill(0));
     this._shipLoc = {}
   }
-
+  
   get grid() {
     return this._grid.map( subarray => 
       subarray.map( element => {
@@ -237,7 +237,7 @@ export class Computer extends Player {
       break
     }
 
-    if (isVertical) {
+    if (isVertical && vertMoves.length != 0) {
       return vertMoves[Math.floor(Math.random() * vertMoves.length)]
     }
 
@@ -269,7 +269,7 @@ export class Computer extends Player {
       break
     }
 
-    if (isVertical === false) {
+    if (isVertical === false && horzMoves.length != 0) {
       return horzMoves[Math.floor(Math.random() * horzMoves.length)]
     }
 
