@@ -34,26 +34,31 @@ const initializeDom = (parentDiv) => {
     return element;
   };
 
-  const header = _makeComponent("header");
-  header.appendChild(_makeComponent("notifications"));
 
-  const content = _makeComponent("content");
-  content.appendChild(_makeGrid("user-grid"));
-  content.appendChild(_makeComponent("log"));
-  content.appendChild(_makeGrid("computer-grid"));
 
-  const optionsContainer = _makeComponent("options-container");
-  optionsContainer.appendChild(_makeComponent("options"));
-  optionsContainer.appendChild(_makeComponent("options-tab"));
+  const replayButton = _makeComponent('button-replay', 'button')
+  const battleLog = _makeComponent('log')
 
-  const footer = _makeComponent("footer");
-  footer.appendChild(_makeComponent("user-ships"));
-  footer.appendChild(_makeComponent("computer-ships"));
+  const userSide = _makeComponent("user-side");
+  const userInfo = _makeComponent('user-info')
+  userInfo.appendChild(_makeComponent('user-name'))
+  userSide.appendChild(userInfo)
+  userSide.appendChild(_makeGrid("user-grid"));
+  userSide.appendChild(_makeComponent('user-ships-container'))
+  const computerSide = _makeComponent("computer-side");
+  const computerInfo = _makeComponent('computer-info')
+  computerInfo.appendChild(_makeComponent('computer-name'))
+  computerInfo.appendChild(_makeComponent('button-easy', "button"))
+  computerInfo.appendChild(_makeComponent('button-medium', "button"))
+  computerInfo.appendChild(_makeComponent('button-hard', "button"))
+  computerSide.appendChild(computerInfo)
+  computerSide.appendChild(_makeGrid("computer-grid"));
+  computerSide.appendChild(_makeComponent('compter-ships-container'))
 
-  parentDiv.appendChild(optionsContainer);
-  parentDiv.appendChild(header);
-  parentDiv.appendChild(content);
-  parentDiv.appendChild(footer);
+  parentDiv.appendChild(replayButton);
+  parentDiv.appendChild(battleLog);
+  parentDiv.appendChild(userSide);
+  parentDiv.appendChild(computerSide);
 };
 
 export default initializeDom;
