@@ -135,5 +135,5 @@ const gameEncapsulate = () => {
     endGame(winner)
 }
 
-gameEncapsulate()
-document.querySelector('#app').addEventListener('mouseup', gameEncapsulate)
+// gameEncapsulate()
+// document.querySelector('#app').addEventListener('mouseup', gameEncapsulate)
