@@ -35,7 +35,11 @@ export class Gameboard {
     this._grid = Array.from({ length: 10 }, () => Array(10).fill(0));
     this._shipLoc = {}
   }
-  
+ 
+  get realGrid() {
+    return this._grid
+  }
+
   get grid() {
     return this._grid.map( subarray => 
       subarray.map( element => {
