@@ -2,11 +2,13 @@ import "./style.css";
 // import javascriptLogo from "./javascript.svg";
 // import viteLogo from "/vite.svg";
 // import { setupCounter } from "./counter.js";
-import initializeDom from "./initializeDom.js";
 import { Player, Computer, Ship, Gameboard, Battlelog } from "./classes";
+import {getRandomBoard, switchBetween, isWin} from "./utility"
+import fillGrid from "./fillGrid";
 
 // Setup Dom
-initializeDom(document.querySelector("#app"));
+fillGrid('left', document.querySelector("#grid-left"));
+fillGrid('right', document.querySelector("#grid-right"));
 
 let user
 let computer
@@ -16,45 +18,6 @@ let computerShips
 let userShips
 let battlelog
 
-const getRandomCoords = () => {
-    return [Math.floor(Math.random() * 10), Math.floor(Math.random() * 10)]
-}
-
-const getRandBool = () => {
-    if (Math.random() > 0.5) {
-        return true
-    }
-    return false
-}
-
-const switchBetween = (current, optionOne, optionTwo) => {
-    if (current=== optionOne) {
-        return optionTwo 
-    }
-    return optionOne
-}
-
-const isWin = (board) => {
-    return board.isWiped()
-}
-
-const placeShipsRandomly = (ships) => {
-    const board = new Gameboard()
-    for (let i = 0; i < ships.length; i += 1) {
-        let success = false
-        ships[i].isVertical = getRandBool()
-        while (!success) {
-            try {
-                board.addShip(ships[i], getRandomCoords())
-                success = true
-            } catch (error) {
-                console.log('Computer attempting to place ship')
-            }
-        }
-    }
-    return board
-}
-
 const startGame = () => {
     // refresh players
     user = new Computer("Computer 1")
@@ -63,15 +26,14 @@ const startGame = () => {
     // refresh gamemboard and ships
     userShips = [new Ship('carrier', 5), new Ship('battleship', 4), new Ship('cruiser', 3), new Ship('submarine', 3), new Ship('destroyer', 2)]
     computerShips = [new Ship('carrier', 5), new Ship('battleship', 4), new Ship('cruiser', 3), new Ship('submarine', 3), new Ship('destroyer', 2)]
-    userGameboard = placeShipsRandomly(userShips) 
-    computerGameboard = placeShipsRandomly(computerShips) 
+    userGameboard = getRandomBoard(userShips) 
+    computerGameboard = getRandomBoard(computerShips) 
     // refresh battle log
     battlelog = new Battlelog()
     // refresh DOM elements
         // TODO
 }
 
-// In game
 const playGame = (player1, player2, gb1, gb2, battlelog) => {
     // TODO change this to be responsive to DOM
     let currPlayer = player1 
@@ -127,13 +89,31 @@ const endGame = (winner) => {
 }
 
 const gameEncapsulate = () => {
-    // Start Game
     startGame()
-    // Game
     let winner = playGame(user, computer, userGameboard, computerGameboard, battlelog)
-    // End Game
     endGame(winner)
 }
 
+
+document.addEventListener('DOMContentLoaded', function () {
+    // Get all toggle items
+    const toggleDifficulty = document.querySelectorAll('.toggle-difficulty');
+
+    // Add click event listener to each item
+    toggleDifficulty.forEach(item => {
+        item.onclick = function () {
+            // Remove 'active' class from all items
+            toggleDifficulty.forEach(item => {
+                item.classList.remove('active');
+            });
+
+            // Add 'active' class to the clicked item
+            this.classList.add('active');
+        };
+    });
+});
+
+
+
 // gameEncapsulate()
-// document.querySelector('#app').addEventListener('mouseup', gameEncapsulate)
+// document.querySelector('#app').adEventListener('mouseup', gameEncapsulate)

@@ -7,7 +7,46 @@
     <title>Vite App</title>
   </head>
   <body>
-    <div id="app"></div>
+    <div id="app" class="ocean">
+      <div id="options-container">
+        <div id="options">
+          <button id="retry" class="">retry</button>
+          <button id="easy" class="toggle-difficulty">easy</button>
+          <button id="medium" class="toggle-difficulty">medium</button>
+          <button id="hard" class="toggle-difficulty">hard</button>
+        </div>
+        <img src="./icons/dropdown.svg" alt="dropdown icon" id="bookmark">
+      </div>
+      <div class="overlay" id="overlay-left"></div>
+      <div class="overlay" id="overlay-right"></div>
+      <div id="header">
+        <div class="name" id="name-left">player1</div>
+        <div class="name" id="name-right">player2</div>
+      </div>
+      <div id="main">
+        <div class="grid" id="grid-left"></div>
+        <div id="log">
+          log
+        </div>
+        <div class="grid" id="grid-right"></div>
+        <div class="ships-container" id="ships-container-left">
+          <div class="ship" id="carrier-left">carrier</div>
+          <div class="ship" id="destroyer-left">destryober</div>
+          <div class="ship" id="battleship-left">battleship</div>
+          <div class="ship" id="submarine-left">submarine</div>
+          <div class="ship" id="cruiser-left">cruiser</div>
+        </div>
+        <div class="ships-container" id="ships-container-right">
+          <div class="ship" id="carrier-right">carrier</div>
+          <div class="ship" id="destroyer-right">destroyer</div>
+          <div class="ship" id="battleship-right">battleship</div>
+          <div class="ship" id="submarine-right">submarine</div>
+          <div class="ship" id="cruiser-right">cruiser</div>
+        </div>
+      </div>
+      <div class="wave"></div>
+      <div class="wave"></div>
+    </div>
     <script type="module" src="/main.js"></script>
   </body>
 </html>
