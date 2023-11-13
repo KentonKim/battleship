@@ -2,7 +2,10 @@
 @import "./skeleton.css";
 
 * {
-  border: 1px solid red;
+  /* border: 1px solid red; */
+  --log-width: 200px;
+  --log-height: 400px;
+  --color-sand: #76b6c4;
 }
 
 html,
@@ -10,68 +13,63 @@ body {
   height: 100%;
 }
 
+ /* button stuff */
+button {
+  color: white;
+  padding: 0;
+}
+button:hover {
+  color: white;
+}
+
 #app {
   height: 100%;
   display: flex;
   flex-direction: column;
-}
-
-#options-container {
-  /* background-color: aquamarine; */
-  --width: 300px;
-  --hide-height: 100px;
-  position: fixed;
-  top: calc(-1 * var(--hide-height));
-  left: calc(50% - 0.5 * var(--width));
-  width: var(--width);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  transition: top 0.5s ease;
-  z-index: 99;
+  background-color: var(--color-sand);
 }
 
 #options{
-  height: var(--hide-height);
+  height: 100px;
+  background-image: url('./icons/wood\ texture.webp');
+  background-size: contain;
+  display: grid;
+  padding: 10px;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  grid-template-areas: 
+    "retry retry retry"
+    "easy med hard";
 }
 
 .toggle-difficulty {
+  width: 80px;
 }
 
 .toggle-difficulty.active {
-  background-color: blue;
+  background-color: rgba(0, 0, 0, 0.5);
   color: white;
 }
 
-#bookmark {
-  background-color: rgba(0, 0, 0, 0.2);
-  border-radius: 0 0 20px 20px;
-  width: 80px;
-  height: 40px;
-  transition: opacity 1s ease;
-  transition-delay: 1s;
-}
-
-#options-container:has(#bookmark:hover), #options-container:has(#options:hover) {
-  top: 0;
-}
-
-#bookmark:hover, #options:hover + #bookmark {
-  transition: opacity 0.5s ease;
-  transition-delay: 0s;
-  opacity: 0;
-}
-
 #log {
-  width: 200px;
-  height: 500px;
+  width: var(--log-width);
+  height: var(--log-height);
+  margin-top: 80px;
+  background-color: #015871;
+  /* background: repeating-linear-gradient(
+    0deg,
+    red,
+    red 25px,
+    white 25px,
+    white 50px
+  ); */
 }
 
 .overlay {
   top: 0;
   position: fixed;
   width: 50%;
-  height: 100%;
+  /* height: 100%; */
   background-color: transparent;
   z-index: 2;
   opacity: 0.5;
@@ -94,17 +92,23 @@ body {
 #main {
   display: grid;
   grid-template-areas:
+    "name1 turn name2"
     "grid1 log grid2"
-    "ships1 empty ships2";
+    "ships1 . ships2";
+  grid-template-columns: 1fr var(--log-width) 1fr;
+  grid-template-rows: 60px 1fr 100px;
+  justify-items: center;
 }
 
-#ships-container-right {
-  grid-area: ships2;
+#main > div {
 }
 
 .name {
   width: 300px;
   height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .grid {
@@ -113,6 +117,43 @@ body {
   display: grid;
   grid-template-columns: repeat(11, 1fr);
   grid-template-rows: repeat(11, 1fr);
+}
+
+#grid-right > .grid-node:not(.hit):not(.sunk):not(.missed):hover {
+  background-color: #004f65;
+}
+
+.grid > div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.grid-node {
+  position: relative;
+  border-right: 1px solid black;
+  border-bottom: 1px solid black;
+  background-size: contain;
+}
+
+.grid-node.missed {
+  background-image: url('./icons/droplet.svg');
+}
+
+.grid-node.hit {
+  background-image: url('./icons/fire.svg');
+}
+
+.grid-node.sunk {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.column-node {
+  border-bottom: 1px solid black;
+}
+
+.row-node {
+  border-right: 1px solid black;
 }
 
 .ships-container {
@@ -124,4 +165,53 @@ body {
 
 .ships-container > div {
   height: 40px;
+}
+
+/* Wave animation*/
+body {
+  background:radial-gradient(ellipse at center, rgba(255,254,234,1) 0%, rgba(255,254,234,1) 35%, #B7E8EB 100%);
+  overflow: hidden;
+}
+
+.ocean { 
+  height: 5%;
+  width:100%;
+  position:absolute;
+  bottom:0;
+  left:0;
+  background: #015871;
+}
+
+.wave {
+  background: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/85486/wave.svg) repeat-x; 
+  position: absolute;
+  top: -138px;
+  width: 6400px;
+  height: 198px;
+  animation: wave 7s cubic-bezier( 0.36, 0.45, 0.63, 0.53) infinite;
+  transform: translate3d(0, 0, 0);
+}
+
+.wave:nth-of-type(2) {
+  top: -115px;
+  animation: wave 7s cubic-bezier( 0.36, 0.45, 0.63, 0.53) -.125s infinite, swell 7s ease -1.25s infinite;
+  opacity: 1;
+}
+
+@keyframes wave {
+  0% {
+    margin-left: 0;
+  }
+  100% {
+    margin-left: -1600px;
+  }
+}
+
+@keyframes swell {
+  0%, 100% {
+    transform: translate3d(0,-25px,0);
+  }
+  50% {
+    transform: translate3d(0,5px,0);
+  }
 }
