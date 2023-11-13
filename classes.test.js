@@ -124,18 +124,18 @@ describe("Gameboard class", () => {
       })
 
       it("Acknowledges a hit", () => {
-         expect(gameboard.receiveAttack([0,0])).toBe(false)
+         expect(gameboard.receiveAttack([0,0])).toBe(true)
       })
 
       it("Acknowledges a sink", () => {
          gameboard.receiveAttack([0,0])
          gameboard.receiveAttack([1,0])
          gameboard.receiveAttack([2,0])
-         expect(gameboard.receiveAttack([3,0])).toBe(true)
+         expect(gameboard.receiveAttack([3,0])).toBe(ship)
       })
 
       it("Acknowledges a miss", () => {
-         expect(gameboard.receiveAttack([0,1])).toBeNull()
+         expect(gameboard.receiveAttack([0,1])).toBe(false)
       })
 
       it("Acknowledges a wipeout", () => {
