@@ -17,3 +17,20 @@ TOP Battleship
       // 
 
 // When there is a 
+
+
+
+Ocean palette
+https://www.color-hex.com/color-palette/3497
+Ocean Sand pallete
+https://www.color-hex.com/color-palette/39447
+o
+
+
+CONNECT GIRD NODE WITH LOGIC
+
+click node -> get node id -> get coordinates -> wrap in resolved promise
+
+? How to send promise to coords in playgame() ?
+
+promise -> coords

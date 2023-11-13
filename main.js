@@ -34,13 +34,15 @@ const startGame = () => {
         // TODO
 }
 
-const playGame = (player1, player2, gb1, gb2, battlelog) => {
+const playGame = async (player1, player2, gb1, gb2, battlelog) => {
     // TODO change this to be responsive to DOM
     let currPlayer = player1 
     let currBoard = gb2
     let result
     let coords
     let isGoingAgain = true
+    let nodeDOM
+    let sideString
 
     while (!isWin(currBoard)) {
         // Premptive Turn Switch conclusion
@@ -57,24 +59,34 @@ const playGame = (player1, player2, gb1, gb2, battlelog) => {
         // Player chooses a spot
         console.log(`${currPlayer.name}`)
         if (currPlayer === player1) {
-            coords = player1.playMove(currBoard.grid)
+            coords = await getUserCoords() 
+            sideString = 'right-'
         } else {
             coords = player2.playMove(currBoard.grid)
+            sideString = 'left-'
         }
+
+        nodeDOM = document.getElementById(`${sideString}${coords[0]}${coords[1]}`)
 
         // Proceeds with attack
         result = currBoard.receiveAttack(coords)
-        if (result === null) {
-            // displayMiss() // TODO DOM
-            console.log('missed')
+        if (result instanceof Ship) {
+            isGoingAgain = true
+            nodeDOM.classList.add('hit')
+            console.log('ship sunk')
+            let sunkCoordinates
+            for (let i = 0; i < currBoard.shipLoc[result.name].length; i += 1) {
+                sunkCoordinates = currBoard.shipLoc[result.name][i]
+                nodeDOM = document.getElementById(`${sideString}${sunkCoordinates[0]}${sunkCoordinates[1]}`)
+                nodeDOM.classList.add('sunk')
+            }
         } else if (result) {
             isGoingAgain = true
-            // displaySunk() // TODO DOM
-            console.log('ship sunk')
-        } else if (!result) {
-            isGoingAgain = true
-            // displayHit() // TODO DOM
+            nodeDOM.classList.add('hit')
             console.log('ship hit')
+        } else if (!result) {
+            nodeDOM.classList.add('missed')
+            console.log('missed')
         }
 
         // battle log logs attack
@@ -97,6 +109,9 @@ const gameEncapsulate = () => {
 
 document.addEventListener('DOMContentLoaded', function () {
     // Get all toggle items
+    setTimeout(() => {
+        gameEncapsulate()
+    }, 1000);
     const toggleDifficulty = document.querySelectorAll('.toggle-difficulty');
 
     // Add click event listener to each item
@@ -115,5 +130,4 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-// gameEncapsulate()
 // document.querySelector('#app').adEventListener('mouseup', gameEncapsulate)
