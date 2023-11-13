@@ -14,15 +14,20 @@ const fillGrid = (side, element) => {
         element.appendChild(emptyNode);
       } else if (i === -1 && j > -1) {
         const columnNode = _makeComponent(side, `column-${j}`);
+        columnNode.classList.add("column-node");
         columnNode.textContent = j;
         element.appendChild(columnNode);
       } else if (j === -1 && i > -1) {
         const rowNode = _makeComponent(side, `row-${i}`);
+        rowNode.classList.add("row-node");
         rowNode.textContent = i;
         element.appendChild(rowNode);
       } else {
         const gridNode = _makeComponent(side, `${i}${j}`);
         gridNode.classList.add("grid-node");
+        if (side == 'right') {
+          // gridNode.addEventListener('mouseup', )
+        }
         element.appendChild(gridNode);
       }
     }
