@@ -33,7 +33,7 @@ export class Gameboard {
   constructor() {
     this.log = []; // keep track of missed attacks
     this._grid = Array.from({ length: 10 }, () => Array(10).fill(0));
-    this._shipLoc = {}
+    this.shipLoc = {}
   }
  
   get realGrid() {
@@ -116,10 +116,10 @@ export class Gameboard {
 
     for (let i = 0; i < shipLength; i += 1) {
         this._grid[row][col] = ship
-        if (!(ship.name in this._shipLoc)) {
-          this._shipLoc[ship.name] = []
+        if (!(ship.name in this.shipLoc)) {
+          this.shipLoc[ship.name] = []
         }
-        this._shipLoc[ship.name].push([row, col])
+        this.shipLoc[ship.name].push([row, col])
         // this._indicateNearbyShip([row,col])
         incrementRowCol(ship)
     }
@@ -140,19 +140,19 @@ export class Gameboard {
     // sends hit to correct ship
     if (gridValue <= 0) {
         this._grid[row][col] = 1
-        return null 
+        return false 
     } else if (gridValue === 1 || gridValue === 2) {
         throw new Error("Attempted to shoot shot place")
     } else if (gridValue instanceof Ship) {
         gridValue.hit()
         if (gridValue.isSunk()) {
-          for (let coord of this._shipLoc[gridValue.name]) {
+          for (let coord of this.shipLoc[gridValue.name]) {
             this._grid[coord[0]][coord[1]] = 3
           }
-          return true
+          return gridValue 
         } else {
           this._grid[row][col] = 2
-          return false
+          return true 
         }
     } else {
         throw new Error("Unexpected value in grid")
