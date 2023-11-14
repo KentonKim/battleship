@@ -2,7 +2,7 @@ import "./style.css";
 // import javascriptLogo from "./javascript.svg";
 // import viteLogo from "/vite.svg";
 // import { setupCounter } from "./counter.js";
-import { Player, Computer, Ship, Gameboard, Battlelog } from "./classes";
+import { Listener, Player, Computer, Ship, Gameboard, Battlelog } from "./classes";
 import {getRandomBoard, switchBetween, isWin} from "./utility"
 import fillGrid from "./fillGrid";
 
@@ -43,6 +43,7 @@ const playGame = async (player1, player2, gb1, gb2, battlelog) => {
     let isGoingAgain = true
     let nodeDOM
     let sideString
+    const listener = new Listener()
 
     while (!isWin(currBoard)) {
         // Premptive Turn Switch conclusion
@@ -106,6 +107,10 @@ const gameEncapsulate = () => {
     endGame(winner)
 }
 
+
+document.body.addEventListener('mouseup', (e) => {
+    console.log(e.target)
+})
 
 document.addEventListener('DOMContentLoaded', function () {
     // Get all toggle items
