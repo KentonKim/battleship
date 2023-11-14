@@ -352,3 +352,48 @@ export class Battlelog {
     this._turn += 1
   }
 }
+
+export class Listener {
+  constructor() {
+    this._isListening = false
+    this._coords = null
+  }
+
+  /**
+   * @param {boolean} bool
+   */
+  set isListening(bool) {
+    this._isListening = bool
+  }
+
+  /**
+   * @param {string} id
+   */
+  set coords(id) {
+    const regex = /^right-\d{2}$/;
+    if (this._isListening && regex.test(id)) {
+      const numbersRegex = /(\d{2})$/
+      const match = id.match(numbersRegex)
+      this._coords = [ parseInt(match[0][0]), parseInt(match[0][1]) ]
+    }
+  }
+
+  async getCoords() {
+    if (this._isListening) {
+      return new Promise((resolve, reject) => {
+        const intervalId = setInterval(() => {
+            if (this._coords != null) {
+              clearInterval(intervalId)
+              resolve(this._coords)
+            }
+          }, 100);
+        setTimeout(() => {
+          clearInterval(intervalId)
+          reject(new Error("Did not obtain coord value in allotted time")) 
+        }, 10000);
+      })
+    } else {
+      return Promise.resolve(false) 
+    }
+  }
+}
