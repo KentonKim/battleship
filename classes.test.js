@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-import { Ship, Gameboard, Computer, Battlelog, Player } from "./classes"
+import {Listener, Ship, Gameboard, Computer, Battlelog, Player } from "./classes"
 
 describe("Ship class", () => {
  let length = 5 
@@ -340,3 +340,45 @@ describe("Battlelog class", () => {
    })
 })
 
+describe("Listener class", () => {
+   let listener
+   const delay = (ms, value) => new Promise( resolve => setTimeout(() => resolve(value), ms))
+
+   beforeEach(() => {
+      listener = new Listener()
+   })
+
+   it("Returns false while turned off", () => {
+      listener.getCoords()
+         .then((resolve) => {
+            expect(resolve).toBe(false)
+         })
+   })
+
+   it("Returns false if nothing was added after toggling true", async () => {
+      const randomValue = Math.random()
+      listener.coords = "right-01"
+      listener.isListening = true
+      const result = await Promise.race([listener.getCoords(), delay(1000, randomValue)])
+      expect(result).toBe(randomValue)
+   })
+
+   describe("Listener toggled on", () => {
+      beforeEach(() => {
+         listener.isListening = true
+      })
+
+      it("Returns correct coords", async () => {
+         setTimeout(() => listener.coords = "right-01", 10);
+         const coords = await listener.getCoords()
+         expect(coords).toEqual([0,1])
+      })
+
+      it("Clicking on non grid-node does nothing", async () => {
+         const randomValue = Math.random()
+         const result = await Promise.race([listener.getCoords(), delay(1000, randomValue)])
+         expect(result).toBe(randomValue)
+      })
+   })
+
+})
