@@ -31,7 +31,7 @@ export class Ship {
 
 export class Gameboard {
   constructor() {
-    this.log = []; // keep track of missed attacks
+    this.ships = []; 
     this._grid = Array.from({ length: 10 }, () => Array(10).fill(0));
     this.shipLoc = {}
   }
@@ -71,7 +71,6 @@ export class Gameboard {
     }
   }
 
-  /* PLAY WITH SHIPS ALLOWED TO BE ADJACENT
   _indicateNearbyShip(coordinates) {
     let row = coordinates[0]
     let col = coordinates[1]
@@ -87,7 +86,6 @@ export class Gameboard {
     }
     return
   }
-  */
 
   addShip(ship, coordinates) {
     // Assume coordinates within grid bounds
@@ -111,6 +109,7 @@ export class Gameboard {
         incrementRowCol(ship)
     }
 
+    this.ships.push(ship)
     row = coordinates[0]
     col = coordinates[1]
 
@@ -120,7 +119,7 @@ export class Gameboard {
           this.shipLoc[ship.name] = []
         }
         this.shipLoc[ship.name].push([row, col])
-        // this._indicateNearbyShip([row,col])
+        this._indicateNearbyShip([row,col])
         incrementRowCol(ship)
     }
 
@@ -161,12 +160,10 @@ export class Gameboard {
 
   isWiped() {
     //  report if all ships have been sunk
-    for (let i = 0; i < this._grid.length; i += 1) {
-        for (let j = 0; j < this._grid[0].length; j += 1) {
-            if (this._grid[i][j] instanceof Ship) {
-                return false
-            }
-        }
+    for (let ship of this.ships) {
+      if (!ship.isSunk()) {
+        return false
+      }
     }
     return true
   }
@@ -380,6 +377,7 @@ export class Listener {
 
   async getCoords() {
     if (this._isListening) {
+      this._coords = null
       return new Promise((resolve, reject) => {
         const intervalId = setInterval(() => {
             if (this._coords != null) {
@@ -390,7 +388,7 @@ export class Listener {
         setTimeout(() => {
           clearInterval(intervalId)
           reject(new Error("Did not obtain coord value in allotted time")) 
-        }, 10000);
+        }, 100000);
       })
     } else {
       return Promise.resolve(false) 
