@@ -18,10 +18,6 @@ const switchBetween = (current, optionOne, optionTwo) => {
     return optionOne
 }
 
-const isWin = (board) => {
-    return board.isWiped()
-}
-
 const getRandomBoard = (ships) => {
     const board = new Gameboard()
     for (let i = 0; i < ships.length; i += 1) {
@@ -39,4 +35,4 @@ const getRandomBoard = (ships) => {
     return board
 }
 
-export {getRandBool, getRandomBoard, getRandomCoords, switchBetween, isWin}
+export {getRandBool, getRandomBoard, getRandomCoords, switchBetween}

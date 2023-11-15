@@ -2,8 +2,8 @@ import "./style.css";
 // import javascriptLogo from "./javascript.svg";
 // import viteLogo from "/vite.svg";
 // import { setupCounter } from "./counter.js";
-import { Listener, Player, Computer, Ship, Gameboard, Battlelog } from "./classes";
-import {getRandomBoard, switchBetween, isWin} from "./utility"
+import { Listener, Player, Computer, Ship, Battlelog } from "./classes";
+import {getRandomBoard, switchBetween} from "./utility"
 import fillGrid from "./fillGrid";
 
 // Setup Dom
@@ -20,7 +20,7 @@ let battlelog
 
 const startGame = () => {
     // refresh players
-    user = new Computer("Computer 1")
+    user = new Player("Player 1")
     computer = new Computer('Computer 2')
 
     // refresh gamemboard and ships
@@ -44,8 +44,12 @@ const playGame = async (player1, player2, gb1, gb2, battlelog) => {
     let nodeDOM
     let sideString
     const listener = new Listener()
+    document.body.addEventListener('mouseup', (e) => {
+        console.log(e.target.id)
+        listener.coords = e.target.id
+    })
 
-    while (!isWin(currBoard)) {
+    while (!currBoard.isWiped()) {
         // Premptive Turn Switch conclusion
         if (!isGoingAgain) {
             currPlayer = switchBetween(currPlayer, player1, player2)
@@ -59,18 +63,29 @@ const playGame = async (player1, player2, gb1, gb2, battlelog) => {
 
         // Player chooses a spot
         console.log(`${currPlayer.name}`)
+
         if (currPlayer === player1) {
-            coords = await getUserCoords() 
-            sideString = 'right-'
+            while (true) {
+                try {
+                listener.isListening = true
+                coords = await listener.getCoords() 
+                listener.isListening = false
+                sideString = 'right-'
+                result = currBoard.receiveAttack(coords)
+                break
+                } catch (error) {
+                    console.log(error)
+                }
+            }
         } else {
             coords = player2.playMove(currBoard.grid)
             sideString = 'left-'
+            result = currBoard.receiveAttack(coords)
         }
 
         nodeDOM = document.getElementById(`${sideString}${coords[0]}${coords[1]}`)
 
         // Proceeds with attack
-        result = currBoard.receiveAttack(coords)
         if (result instanceof Ship) {
             isGoingAgain = true
             nodeDOM.classList.add('hit')
@@ -98,19 +113,16 @@ const playGame = async (player1, player2, gb1, gb2, battlelog) => {
 }
 
 const endGame = (winner) => {
+    console.log(userGameboard.grid)
+    console.log(computerGameboard.grid)
     alert(`${winner.name} has won!`)    
 }
 
-const gameEncapsulate = () => {
+const gameEncapsulate = async () => {
     startGame()
-    let winner = playGame(user, computer, userGameboard, computerGameboard, battlelog)
+    let winner = await playGame(user, computer, userGameboard, computerGameboard, battlelog)
     endGame(winner)
 }
-
-
-document.body.addEventListener('mouseup', (e) => {
-    console.log(e.target)
-})
 
 document.addEventListener('DOMContentLoaded', function () {
     // Get all toggle items

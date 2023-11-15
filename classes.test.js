@@ -71,7 +71,7 @@ describe("Gameboard class", () => {
       }).toThrow()
    })
 
-   it.skip("Invalid place to put due to ship nearby", () => {
+   it("Invalid place to put due to ship nearby", () => {
       gameboard.addShip(ship, [0,3])
       const newShip = new Ship("test2", 2, false)
       expect(() => {
@@ -143,6 +143,10 @@ describe("Gameboard class", () => {
             gameboard.receiveAttack([i,0])
          }
          expect(gameboard.isWiped()).toBe(true)
+      })
+
+      it("Acknowledges a continued game after initialization", () => {
+         expect(gameboard.isWiped()).toBe(false)
       })
 
       it("Acknowledges a continued game after hit", () => {

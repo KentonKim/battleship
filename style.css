@@ -5,7 +5,7 @@
   /* border: 1px solid red; */
   --log-width: 200px;
   --log-height: 400px;
-  --color-sand: #76b6c4;
+  --color-background: #76b6c4;
 }
 
 html,
@@ -26,7 +26,7 @@ button:hover {
   height: 100%;
   display: flex;
   flex-direction: column;
-  background-color: var(--color-sand);
+  background-color: var(--color-background);
 }
 
 #options{
@@ -120,7 +120,7 @@ button:hover {
 }
 
 #grid-right > .grid-node:not(.hit):not(.sunk):not(.missed):hover {
-  background-color: #004f65;
+  background-color: #6aa3b0;
 }
 
 .grid > div {
@@ -141,7 +141,7 @@ button:hover {
 }
 
 .grid-node.hit {
-  background-image: url('./icons/fire.svg');
+  background-image: url('./icons/cross.svg');
 }
 
 .grid-node.sunk {
