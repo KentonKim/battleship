@@ -1,3 +1,4 @@
+
 export class Ship {
   constructor(name, length, isVertical = true) {
     this.name = name;
@@ -33,6 +34,12 @@ export class Gameboard {
   constructor() {
     this.ships = []; 
     this._grid = Array.from({ length: 10 }, () => Array(10).fill(0));
+    // 0 => Empty
+    // -1 => next to ship
+    // 1 => Missed
+    // 2 => Hit 
+    // 3 => Sunk 
+    // 4 => Missed discovered by sunken ship
     this.shipLoc = {}
   }
  
@@ -43,7 +50,7 @@ export class Gameboard {
   get grid() {
     return this._grid.map( subarray => 
       subarray.map( element => {
-        if (element instanceof Ship) {
+        if (element instanceof Ship || element === -1) {
           return 0
         } else {
           return element
@@ -146,7 +153,19 @@ export class Gameboard {
         gridValue.hit()
         if (gridValue.isSunk()) {
           for (let coord of this.shipLoc[gridValue.name]) {
-            this._grid[coord[0]][coord[1]] = 3
+            for (let i = -1; i < 2; i += 1) {
+              for (let j = -1; j < 2; j += 1) {
+                if (i === 0 && j === 0) {
+                  this._grid[coord[0]][coord[1]] = 3
+                } else if (this._isInBounds([coord[0]+ i, coord[1] + j])) {
+                  if (this._grid[coord[0]+i][coord[1]+j] === 3) {
+                    continue
+                  } else{
+                    this._grid[coord[0]+i][coord[1]+j] = 4
+                  }
+                }
+              }
+            }
           }
           return gridValue 
         } else {

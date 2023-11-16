@@ -107,6 +107,10 @@ describe("Gameboard class", () => {
       const mockGrid = Array.from({ length: 10 }, () => Array(10).fill(0))
       mockGrid[0][0] = 3
       mockGrid[1][0] = 3
+      mockGrid[0][1] = 4
+      mockGrid[1][1] = 4
+      mockGrid[2][0] = 4
+      mockGrid[2][1] = 4
       expect(gameboard.grid).toEqual(mockGrid)
    })
 
