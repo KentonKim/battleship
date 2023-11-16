@@ -119,7 +119,7 @@ button:hover {
   grid-template-rows: repeat(11, 1fr);
 }
 
-#grid-right > .grid-node:not(.hit):not(.sunk):not(.missed):hover {
+#grid-right.on-turn > .grid-node:not(.hit):not(.sunk):not(.missed):hover {
   background-color: #6aa3b0;
 }
 

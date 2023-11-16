@@ -91,10 +91,19 @@ const playGame = async (player1, player2, gb1, gb2, battlelog) => {
             nodeDOM.classList.add('hit')
             console.log('ship sunk')
             let sunkCoordinates
-            for (let i = 0; i < currBoard.shipLoc[result.name].length; i += 1) {
-                sunkCoordinates = currBoard.shipLoc[result.name][i]
-                nodeDOM = document.getElementById(`${sideString}${sunkCoordinates[0]}${sunkCoordinates[1]}`)
-                nodeDOM.classList.add('sunk')
+            for (let z = 0; z < currBoard.shipLoc[result.name].length; z += 1) {
+                sunkCoordinates = currBoard.shipLoc[result.name][z]
+                for (let i = -1; i < 2; i += 1) {
+                    for (let j = -1; j < 2; j += 1) {
+                        try {
+                            nodeDOM = document.getElementById(`${sideString}${sunkCoordinates[0] + i}${sunkCoordinates[1] + j}`)
+                            nodeDOM.classList.add('sunk')
+                        } catch (error) {
+                            console.log('Searched node does not exist')
+                            console.log(error)
+                        }
+                    }
+                }
             }
         } else if (result) {
             isGoingAgain = true
